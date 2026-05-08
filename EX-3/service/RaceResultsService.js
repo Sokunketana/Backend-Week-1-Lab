@@ -1,6 +1,6 @@
-
-import { Duration } from "../model/Duration.js";
+import Duration from "../model/Duration.js";
 import { RaceResult } from "../model/RaceResult.js";
+import fs from "fs";
 
 /**
  * This class handle the race results management system.
@@ -19,10 +19,11 @@ export class RaceResultsService {
 
   /**
    * Adds a new race result to the race list.
-   * @param {RaceResult} result - The prace result.
+   * @param {RaceResult} result - The race result.
    */
   addRaceResult(result) {
     // TODO
+    this._raceResults.push(result);
   }
 
   /**
@@ -31,6 +32,7 @@ export class RaceResultsService {
    */
   saveToFile(filePath) {
     // TODO
+    fs.writeFileSync(filePath, JSON.stringify(this._raceResults));
   }
 
   /**
@@ -40,6 +42,10 @@ export class RaceResultsService {
    */
   loadFromFile(filePath) {
     // TODO
+      const data = fs.readFileSync(filePath, 'utf-8');
+      this._raceResults = JSON.parse(data);
+      return true;
+    
   }
 
   /**
@@ -49,7 +55,11 @@ export class RaceResultsService {
    * @returns {Duration|null} Duration if found, else null.
    */
   getTimeForParticipant(participantId, sport) {
-       // TODO
+    // TODO
+    const result = this._raceResults.find(
+      (r) => r.participantId === participantId && r.sport === sport,
+    );
+    return result ? result.time : null;
   }
 
   /**
@@ -58,6 +68,17 @@ export class RaceResultsService {
    * @returns {Duration|null} The total Duration object if found, otherwise null.
    */
   getTotalTimeForParticipant(participantId) {
-        // TODO
+    // TODO
+    const participantResults = this._raceResults.filter((r) => r.participantId === participantId);
+    if (participantResults.length === 0) {
+      return null;
+    }
+
+    let totalSeconds = 0;
+    participantResults.forEach((result) => {
+      totalSeconds += result.time.totalSeconds;
+    });
+
+    return new Duration(totalSeconds);
   }
 }
