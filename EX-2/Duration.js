@@ -5,7 +5,7 @@
 
 //  TODO - You need to export your class to use it
 
-class Duration {
+export default class Duration {
   /**
    * Total duration in seconds.
    * @type {number}
@@ -19,6 +19,7 @@ class Duration {
    */
   constructor(seconds = 0) {
      // YOUR CODE
+     this._totalSeconds = seconds;
   }
 
   /**
@@ -28,7 +29,8 @@ class Duration {
    * @returns {Duration} A new Duration instance.
    */
   static fromMinutesAndSeconds(minutes = 0, seconds = 0) {
-     // YOUR CODE
+     // YOUR CODE`
+     return new Duration(minutes * 60 + seconds);
   }
 
   /**
@@ -38,11 +40,13 @@ class Duration {
    */
   plus = (other) => {
          // YOUR CODE
+      return new Duration(this._totalSeconds + other._totalSeconds);
   };
 
   // YOUR COMMENT
   minus = (other) => {
          // YOUR CODE
+      return new Duration(this._totalSeconds - other._totalSeconds);
   };
 
   /**
@@ -50,6 +54,7 @@ class Duration {
    * @returns {string} The formatted duration string.
    */
   toString = () => {
-        // YOUR CODE
+      // YOUR CODE
+      return `${Math.floor(this._totalSeconds / 60)}m ${this._totalSeconds % 60}s`;
   };
 }
